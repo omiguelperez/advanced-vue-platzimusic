@@ -3,6 +3,8 @@
     input(placeholder="Type your name..." v-model="name")
     div(v-if="name")
       p {{ greeting }}
+    div
+      a(:href="url") @omiguelperez
   </div>
 </template>
 
@@ -11,12 +13,18 @@ export default {
   name: 'app',
   data () {
     return {
-      name: ''
+      name: '',
+      url: 'https://github.com/omiguelperez'
     }
   },
   computed: {
     greeting () {
       return `Hello! My name is ${this.name}`
+    }
+  },
+  watch: {
+    name (newVal, oldVal) {
+      console.log(oldVal, newVal)
     }
   }
 }
