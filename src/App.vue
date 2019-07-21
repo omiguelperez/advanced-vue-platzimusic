@@ -1,10 +1,10 @@
 <template lang="pug">
   #app
-    input(placeholder="Type your name..." v-model="name")
-    div(v-if="name")
-      p {{ greeting }}
     div
-      a(:href="url") @omiguelperez
+      input(placeholder="Type your name..." v-model="name")
+      button(@click="formatName") Format
+    div
+      p The formatted name: {{ formattedName }}
   </div>
 </template>
 
@@ -14,17 +14,12 @@ export default {
   data () {
     return {
       name: '',
-      url: 'https://github.com/omiguelperez'
+      formattedName: ''
     }
   },
-  computed: {
-    greeting () {
-      return `Hello! My name is ${this.name}`
-    }
-  },
-  watch: {
-    name (newVal, oldVal) {
-      console.log(oldVal, newVal)
+  methods: {
+    formatName () {
+      this.formattedName = this.name.split(' ').join('-').toLowerCase()
     }
   }
 }
