@@ -1,25 +1,49 @@
 <template lang="pug">
   #app
-    div
-      input(placeholder="Type your name..." v-model="name")
-      button(@click="formatName") Format
-    div
-      p The formatted name: {{ formattedName }}
+    section.section
+      nav.nav.has-shadow
+        .container
+          input.input.is-large(
+            placeholder="Buscar canciones...",
+            v-model="searchQuery"
+          )
+          a.button.is-info.is-large(@click="search") Buscar
+          a.button.is-danger.is-large &times;
+          p
+            small {{ searchMessage }}
+
+      .container.results
+        .columns
+          .column(v-for="t in tracks") {{ t.name }}
   </div>
 </template>
 
 <script>
+const tracks = [
+  { name: 'Muchacha', artist: 'Luis Alberto Spinetta' },
+  { name: 'Hoy acá en el baile', artist: 'El Pepo' },
+  { name: 'I was made for loving you', artist: 'Kiss' }
+]
+
 export default {
   name: 'app',
+
   data () {
     return {
-      name: '',
-      formattedName: ''
+      searchQuery: '',
+      tracks: []
     }
   },
+
+  computed: {
+    searchMessage () {
+      return `Encontrados ${this.tracks.length}`
+    }
+  },
+
   methods: {
-    formatName () {
-      this.formattedName = this.name.split(' ').join('-').toLowerCase()
+    search () {
+      this.tracks = tracks
     }
   }
 }
@@ -28,17 +52,7 @@ export default {
 <style lang="scss">
 @import "./scss/main.scss";
 
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-
-  h1,
-  h2 {
-    font-weight: normal;
-  }
+.results {
+  margin-top: 50px;
 }
 </style>
