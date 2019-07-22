@@ -5,20 +5,28 @@
     section.section
       nav.nav.has-shadow
         .container
-          input.input.is-large(
-            type="text",
-            placeholder="Buscar canciones",
-            v-model="searchQuery"
-          )
-          a.button.is-info.is-large(@click="search") Buscar
-          a.button.is-danger.is-large &times;
+          .field.has-addons
+            .control
+              input.input.is-large(
+                type="text",
+                placeholder="Buscar canciones",
+                v-model="searchQuery"
+              )
+            .control
+              a.button.is-info.is-large(@click="search") Buscar
+            .control
+              a.button.is-danger.is-large &times;
       .container
-        p
+        p.search-message
           small {{ searchMessage }}
       .container.results
         .columns.is-multiline
           .column.is-one-quarter(v-for="t in tracks")
-            pm-track(:track="t")
+            pm-track(
+              :track="t",
+              @select="setSelectedTrack",
+              :class="{ 'is-active': t.id === selectedTrack }"
+            )
 
     pm-loader(v-if="isLoading")
 
@@ -46,13 +54,14 @@ export default {
     return {
       searchQuery: '',
       tracks: [],
-      isLoading: false
+      isLoading: false,
+      selectedTrack: ' '
     }
   },
 
   computed: {
     searchMessage () {
-      return `Encontrados ${this.tracks.length}`
+      return `Encontrados: ${this.tracks.length}`
     }
   },
 
@@ -66,6 +75,9 @@ export default {
           this.tracks = res.tracks.items
           this.isLoading = false
         })
+    },
+    setSelectedTrack (id) {
+      this.selectedTrack = id
     }
   }
 }
@@ -76,5 +88,13 @@ export default {
 
 .results {
   margin-top: 50px;
+}
+
+.is-active {
+  border: 3px #23d160 solid;
+}
+
+.search-message {
+  padding: 1em 0;
 }
 </style>
