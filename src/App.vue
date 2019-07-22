@@ -2,11 +2,14 @@
   #app
     pm-header
 
+    pm-notification(v-if="showNotification")
+      p(slot='body') No se encontraron resultados
+
     section.section
       nav.nav.has-shadow
         .container
           .field.has-addons
-            .control
+            .control.is-expanded
               input.input.is-large(
                 type="text",
                 placeholder="Buscar canciones",
@@ -39,6 +42,7 @@ import PmFooter from '@/components/layout/Footer'
 import PmHeader from '@/components/layout/Header'
 import PmTrack from '@/components/Track'
 import PmLoader from '@/components/shared/Loader'
+import PmNotification from '@/components/shared/Notification'
 
 export default {
   name: 'app',
@@ -47,7 +51,8 @@ export default {
     PmFooter,
     PmHeader,
     PmTrack,
-    PmLoader
+    PmLoader,
+    PmNotification
   },
 
   data () {
@@ -55,7 +60,8 @@ export default {
       searchQuery: '',
       tracks: [],
       isLoading: false,
-      selectedTrack: ' '
+      selectedTrack: '',
+      showNotification: false
     }
   },
 
@@ -72,12 +78,23 @@ export default {
       this.isLoading = true
       trackService.search(this.searchQuery)
         .then(res => {
+          this.showNotification = res.tracks.total === 0
           this.tracks = res.tracks.items
           this.isLoading = false
         })
     },
     setSelectedTrack (id) {
       this.selectedTrack = id
+    }
+  },
+
+  watch: {
+    showNotification () {
+      if (this.showNotification) {
+        setTimeout(() => {
+          this.showNotification = false
+        }, 3000)
+      }
     }
   }
 }
