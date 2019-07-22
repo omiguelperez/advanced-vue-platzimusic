@@ -6,7 +6,8 @@
       nav.nav.has-shadow
         .container
           input.input.is-large(
-            placeholder="Buscar canciones...",
+            type="text",
+            placeholder="Buscar canciones",
             v-model="searchQuery"
           )
           a.button.is-info.is-large(@click="search") Buscar
@@ -15,37 +16,37 @@
         p
           small {{ searchMessage }}
       .container.results
-        .columns
-          .column(v-for="t in tracks")
-            | {{ t.name }} - {{ t.artists[0].name }}
+        .columns.is-multiline
+          .column.is-one-quarter(v-for="t in tracks")
+            pm-track(:track="t")
 
-      .container
-        p {{ person }}
-        button(@click="add") Add
+    pm-loader(v-if="isLoading")
 
     pm-footer
 </template>
 
 <script>
-import trackService from './services/track'
-import PmFooter from './components/Footer'
-import PmHeader from './components/Header'
+import trackService from '@/services/track'
+import PmFooter from '@/components/layout/Footer'
+import PmHeader from '@/components/layout/Header'
+import PmTrack from '@/components/Track'
+import PmLoader from '@/components/shared/Loader'
 
 export default {
   name: 'app',
 
   components: {
     PmFooter,
-    PmHeader
+    PmHeader,
+    PmTrack,
+    PmLoader
   },
 
   data () {
     return {
       searchQuery: '',
       tracks: [],
-      person:  {
-        name: 'Darlene'
-      }
+      isLoading: false
     }
   },
 
@@ -56,17 +57,14 @@ export default {
   },
 
   methods: {
-    add () {
-      // this.$set(this.person, 'lastName', 'Alderson')
-      this.person = { ...this.person, lastName: 'Alderson' }
-    },
-
     search () {
       if (!this.searchQuery) return
 
+      this.isLoading = true
       trackService.search(this.searchQuery)
         .then(res => {
           this.tracks = res.tracks.items
+          this.isLoading = false
         })
     }
   }
