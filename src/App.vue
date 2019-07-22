@@ -14,6 +14,9 @@
         p
           small {{ searchMessage }}
 
+      .container
+        child
+
       .container.results
         .columns
           .column(v-for="t in tracks")
