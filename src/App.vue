@@ -1,5 +1,7 @@
 <template lang="pug">
   #app
+    pm-header
+
     section.section
       nav.nav.has-shadow
         .container
@@ -9,31 +11,41 @@
           )
           a.button.is-info.is-large(@click="search") Buscar
           a.button.is-danger.is-large &times;
-
       .container
         p
           small {{ searchMessage }}
-
-      .container
-        child
-
       .container.results
         .columns
           .column(v-for="t in tracks")
             | {{ t.name }} - {{ t.artists[0].name }}
-  </div>
+
+      .container
+        p {{ person }}
+        button(@click="add") Add
+
+    pm-footer
 </template>
 
 <script>
 import trackService from './services/track'
+import PmFooter from './components/Footer'
+import PmHeader from './components/Header'
 
 export default {
   name: 'app',
 
+  components: {
+    PmFooter,
+    PmHeader
+  },
+
   data () {
     return {
       searchQuery: '',
-      tracks: []
+      tracks: [],
+      person:  {
+        name: 'Darlene'
+      }
     }
   },
 
@@ -44,6 +56,11 @@ export default {
   },
 
   methods: {
+    add () {
+      // this.$set(this.person, 'lastName', 'Alderson')
+      this.person = { ...this.person, lastName: 'Alderson' }
+    },
+
     search () {
       if (!this.searchQuery) return
 
