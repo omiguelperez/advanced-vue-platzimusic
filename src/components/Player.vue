@@ -1,6 +1,6 @@
 <template lang="pug">
   .content
-    div(v-if="track")
+    div(v-if="track && track.album")
       p
         img(:src="track.album.images[0].url ")
       p
